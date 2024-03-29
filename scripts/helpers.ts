@@ -2,6 +2,10 @@ import { run } from "hardhat";
 import { NomicLabsHardhatPluginError } from "hardhat/plugins";
 import { ethers } from "ethers";
 
+import * as manifestMainnet from "../.openzeppelin/mainnet.json";
+import * as manifestSepolia from "../.openzeppelin/unknown-11155111.json";
+import * as manifestArbitrumOne from "../.openzeppelin/unknown-42161.json";
+
 export const sleep = (m: number) => new Promise((r) => setTimeout(r, m));
 
 export const verifyContract = async (
@@ -38,3 +42,16 @@ export const calculateGasMargin = (
     .mul(ethers.BigNumber.from(10000).add(ethers.BigNumber.from(1000)))
     .div(ethers.BigNumber.from(10000));
 };
+
+export const getManifest = (network: string) => {
+  if (network === "mainnet") {
+    return manifestMainnet;
+  }
+  if (network === "sepolia") {
+    return manifestSepolia;
+  }
+  if (network === "arbitrumOne") {
+    return manifestArbitrumOne;
+  }
+  return undefined;
+}

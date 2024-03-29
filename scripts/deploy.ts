@@ -20,12 +20,13 @@ const main = async () => {
     network.name === "mainnet" ||
     // network.name === "goerli" ||
     network.name === "sepolia" ||
-    network.name === "arb" ||
-    network.name === "arbTestnet"
+    network.name === "arbitrumOne" ||
+    network.name === "arbitrumGoerli" ||
     // network.name === "polygon" ||
     // network.name === "polygonMumbai" ||
     // network.name === "bsc" ||
     // network.name === "bscTestnet"
+    false
   ) {
     console.log(config[network.name]);
 

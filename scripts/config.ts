@@ -1,12 +1,11 @@
 import { ethers } from "ethers";
 
-type Network =
+export type Network =
   | "mainnet"
   // | "goerli"
   | "sepolia"
-  | "arb"
-  | "arbTestnet"
-  | "arbGoerli"
+  | "arbitrumGoerli"
+  | "arbitrumOne"
   // | "polygon"
   // | "polygonMumbai"
   // | "bsc"
@@ -90,7 +89,7 @@ export const config: { [network in Network]: Config } = {
   //   name: "Blocjerk",
   //   symbol: "BJ",
   // },
-  arb: {
+  arbitrumOne: {
     ownerAddress: "0x394ee51b4a2415e89c1bb2de46d3eB3dE8dc96dC",
     treasuryAddress: "0x394ee51b4a2415e89c1bb2de46d3eB3dE8dc96dC",
     totalSupply: ethers.BigNumber.from(oneMillion)
@@ -99,16 +98,7 @@ export const config: { [network in Network]: Config } = {
     name: "Blocjerk",
     symbol: "BJ",
   },
-  arbTestnet: {
-    ownerAddress: "0x9F29801aC82befe279786E5691B0399b637C560c",
-    treasuryAddress: "0x9F29801aC82befe279786E5691B0399b637C560c",
-    totalSupply: ethers.BigNumber.from(oneMillion)
-      .mul(10)
-      .mul(decimals),
-    name: "Blocjerk",
-    symbol: "BJ",
-  },
-  arbGoerli: {
+  arbitrumGoerli: {
     ownerAddress: "0xD3b5134fef18b69e1ddB986338F2F80CD043a1AF",
     treasuryAddress: "0xD3b5134fef18b69e1ddB986338F2F80CD043a1AF",
     totalSupply: ethers.BigNumber.from(oneMillion)
