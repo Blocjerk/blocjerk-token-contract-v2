@@ -76,11 +76,11 @@ const config: HardhatUserConfig = {
       url: `https://bsc-testnet.public.blastapi.io`,
       accounts: [process.env.TESTNET_PRIVATE_KEY],
     },
-    arb: {
+    arbitrumOne: {
       url: `https://rpc.chroniclelabs.io/arb1`,
       accounts: [process.env.MAINNET_PRIVATE_KEY],
     },
-    arbTestnet: {
+    arbitrumGoerli: {
       url: `https://sepolia-rollup.arbitrum.io/rpc`,
       accounts: [process.env.TESTNET_PRIVATE_KEY],
     }
@@ -94,6 +94,8 @@ const config: HardhatUserConfig = {
       polygonMumbai: process.env.POLYGONSCAN_API_KEY,
       bsc: process.env.BSCSCAN_API_KEY,
       bscTestnet: process.env.BSCSCAN_API_KEY,
+      arbitrumGoerli: process.env.ARBSCAN_API_KEY,
+      arbitrumOne: process.env.ARBSCAN_API_KEY,
     },
   },
 };

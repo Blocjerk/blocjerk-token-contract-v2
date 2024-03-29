@@ -16,10 +16,13 @@ const main = async () => {
     network.name === "mainnet" ||
     network.name === "goerli" ||
     network.name === "sepolia" ||
+    network.name === "arbitrumOne" ||
+    network.name === "arbitrumGoerli" ||
     network.name === "polygon" ||
     network.name === "polygonMumbai" ||
     network.name === "bsc" ||
-    network.name === "bscTestnet"
+    network.name === "bscTestnet" ||
+    false
   ) {
     const BlocjerkTokenFactory = new BlocjerkTokenV5__factory(deployer);
     const dehubToken = await BlocjerkTokenFactory.deploy();
