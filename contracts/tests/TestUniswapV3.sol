@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import {TransferHelper} from "@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IUniswapRouter02} from "../interfaces/IUniswapRouter02.sol";
 
 interface IWETH is IERC20 {
   function deposit() external payable;
@@ -13,11 +13,12 @@ interface IWETH is IERC20 {
 }
 
 contract TestUniswapV3 is Ownable {
-  ISwapRouter internal uniswapV3Router;
+  // Address to SwapRouter02
+  IUniswapRouter02 internal uniswapV3Router;
 
   function setUniswapV3Router(address router) external onlyOwner {
     require(router != address(0));
-    uniswapV3Router = ISwapRouter(router);
+    uniswapV3Router = IUniswapRouter02(router);
   }
 
   function swapExactInputSingle(
@@ -42,13 +43,12 @@ contract TestUniswapV3 is Ownable {
       //IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
       //IERC20(tokenIn).approve(address(router), amountIn);
 
-      ISwapRouter.ExactInputSingleParams memory params = ISwapRouter
+      IUniswapRouter02.ExactInputSingleParams memory params = IUniswapRouter02
         .ExactInputSingleParams({
           tokenIn: tokenIn,
           tokenOut: tokenOut,
           fee: poolFee,
           recipient: recipient,
-          deadline: block.timestamp,
           amountIn: amountIn,
           amountOutMinimum: 0,
           sqrtPriceLimitX96: 0

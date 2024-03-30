@@ -39,8 +39,8 @@ const main = async () => {
   console.log("TestUniswapV3", testUniswapV3.address);
   console.log("owner", await testUniswapV3.owner());
 
-  await testUniswapV3.setUniswapV3Router("0xE592427A0AEce92De3Edee1F18E0157C05861564");
-  console.log("set router: 0xE592427A0AEce92De3Edee1F18E0157C05861564");
+  await testUniswapV3.setUniswapV3Router("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45");
+  console.log("set router: 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45");
 
   const amount = hre.ethers.utils.parseEther("100");
   console.log("amount", amount.toString());
