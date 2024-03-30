@@ -262,7 +262,7 @@ contract BlocjerkTokenV4WithVersion is
     uint256 buyTaxRate_,
     uint256 sellTaxRate_
   ) external onlyOwner {
-    require(buyTaxRate != buyTaxRate_ && sellTaxRate != sellTaxRate_);
+    require(buyTaxRate != buyTaxRate_ || sellTaxRate != sellTaxRate_);
 
     buyTaxRate = buyTaxRate_;
     sellTaxRate = sellTaxRate_;

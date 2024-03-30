@@ -21,6 +21,7 @@ contract BlocjerkTokenV5 is BlocjerkTokenV4WithVersion, Uniswap {
   // immediately sell tax for ETH and send to taxTo address.
   uint256 public minTaxForSell;
 
+  // @deprecated, unused variable
   address public USDT;
 
   bool internal inTriggerProcess;
@@ -94,7 +95,11 @@ contract BlocjerkTokenV5 is BlocjerkTokenV4WithVersion, Uniswap {
     uint256 tokensSold;
     uint256 ethReceived;
 
-    if (taxTo != address(0) && tokenAmount > 0) {
+    if (
+      taxTo != address(0) &&
+      tokenAmount > 0 &&
+      address(uniswapV2Router) != address(0)
+    ) {
       // Must approve before swapping
       _approve(address(this), address(uniswapV2Router), tokenAmount);
 

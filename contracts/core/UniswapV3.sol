@@ -6,8 +6,7 @@ import {IUniswapV2Router02} from "@uniswap/v2-periphery/contracts/interfaces/IUn
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {SafeMathUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
-// @deprecated
-abstract contract Uniswap is OwnableUpgradeable {
+abstract contract UniswapV3 is OwnableUpgradeable {
   using SafeMathUpgradeable for uint256;
   // Using Uniswap lib, because Uniswap forks are trash ATM...
   IUniswapV2Router02 internal uniswapV2Router;
@@ -19,11 +18,10 @@ abstract contract Uniswap is OwnableUpgradeable {
   // To receive ETH from uniswapV2Router when swaping
   receive() external payable {}
 
-  function setRouter(address router, address pair) external onlyOwner {
+  function setRouter(address router) external onlyOwner {
     require(router != address(0));
     uniswapV2Router = IUniswapV2Router02(router);
-    uniswapV2Pair = pair;
-    emit RouterSet(router, pair);
+    emit UniswapV2RouterSet(router);
   }
 
   /**
@@ -72,7 +70,8 @@ abstract contract Uniswap is OwnableUpgradeable {
   }
 
   /* --------------------------------- Events --------------------------------- */
-  event RouterSet(address indexed router, address indexed pair);
+  event UniswapV2RouterSet(address indexed router);
+  event UniswapV3RouterSet(address indexed router);
 
   /* -------------------------------- Modifiers ------------------------------- */
   modifier pcsInitialized() {
