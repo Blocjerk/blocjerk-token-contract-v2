@@ -48,7 +48,8 @@ const config: HardhatUserConfig = {
   },
   networks: {
     tenderly: {
-      url: `https://rpc.tenderly.co/fork/40a796db-12b7-440f-bb69-0f07a6708a46`,
+      // url: `https://rpc.tenderly.co/fork/40a796db-12b7-440f-bb69-0f07a6708a46`, // mainnet
+      url: `https://rpc.tenderly.co/fork/caa36591-0c9f-414f-b818-585e638ebf63`, // sepolia
       accounts: [process.env.TESTNET_PRIVATE_KEY],
     },
     mainnet: {

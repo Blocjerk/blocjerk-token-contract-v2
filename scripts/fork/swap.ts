@@ -1,5 +1,5 @@
 import * as hre from "hardhat";
-import { IERC20__factory, IUniswapRouter02__factory, IWETH__factory, TestParent__factory, TestUniswapV3, TestUniswapV3__factory } from "../../typechain";
+import { IUniswapRouter02__factory, IWETH__factory, TestUniswapV3__factory } from "../../typechain";
 
 const main = async () => {
   const deployers = await hre.ethers.getSigners();
@@ -30,6 +30,8 @@ const main = async () => {
   
   console.log("deployer.address", deployer.address);
 
+  const chainId = String(await deployer.getChainId());
+
   const balance = await deployer.getBalance();
   console.log("Balance", balance.toString());
   
@@ -39,11 +41,21 @@ const main = async () => {
   console.log("TestUniswapV3", testUniswapV3.address);
   console.log("owner", await testUniswapV3.owner());
 
-  const routerAddress = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
-  await testUniswapV3.setUniswapV3Router(routerAddress);
-  console.log(`set router: ${routerAddress}`);
+  const config = {
+    "1": {
+      router: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
+      dai: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    },
+    "11155111": {
+      router: "0x3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E",
+      dai: "0x68194a729C2450ad26072b3D33ADaCbcef39D574",
+    }
+  }
 
-  const router = IUniswapRouter02__factory.connect(routerAddress, deployer);
+  await testUniswapV3.setUniswapV3Router((config as any)[chainId].router);
+  console.log(`set router: ${(config as any)[chainId].router}`);
+
+  const router = IUniswapRouter02__factory.connect((config as any)[chainId].router, deployer);
   const wETHAddress = await router.WETH9();
   console.log(`wETH: ${wETHAddress}`);
 
@@ -55,16 +67,15 @@ const main = async () => {
   
   await WETH.approve(testUniswapV3.address, amount);
   console.log("approve testUniswapV3");
+
   await testUniswapV3.swapExactInputSingle(
-    "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", // WETH
-    "0x6B175474E89094C44Da98b954EedeAC495271d0F", // DAI
+    wETHAddress, // WETH
+    (config as any)[chainId].dai,
     "0x1036c5BE9cD90febbeE0DB547c83D3baB70795f8", // recipient
     3000,
     amount
   );
   console.log("swap weth for dai");
-
-  //{"tokenIn":"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2","tokenOut":"0x6B175474E89094C44Da98b954EedeAC495271d0F","fee":3000,"recipient":"0xD3b5134fef18b69e1ddB986338F2F80CD043a1AF","deadline":1811830805,"amountIn":"1000000000000000000","amountOutMinimum":0,"sqrtPriceLimitX96":0}
 }
 
 main().catch((err) => console.error(err));

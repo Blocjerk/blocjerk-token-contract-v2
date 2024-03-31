@@ -9,6 +9,7 @@ import {IUniswapRouter02} from "../interfaces/IUniswapRouter02.sol";
 
 abstract contract UniswapV3 is OwnableUpgradeable {
   // Mainnet: 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45
+  // Sepolia: 0x3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E
   // Address to SwapRouter02
   // https://github.com/Uniswap/swap-router-contracts/blob/main/contracts/SwapRouter02.sol
   IUniswapRouter02 internal uniswapV3Router;
@@ -27,14 +28,6 @@ abstract contract UniswapV3 is OwnableUpgradeable {
     uint amountIn
   ) internal returns (uint amountOut) {
     if (address(uniswapV3Router) != address(0)) {
-      TransferHelper.safeTransferFrom(
-        tokenIn,
-        msg.sender,
-        address(this),
-        amountIn
-      );
-
-      // Approve the router to spend DAI.
       TransferHelper.safeApprove(tokenIn, address(uniswapV3Router), amountIn);
 
       IUniswapRouter02.ExactInputSingleParams memory params = IUniswapRouter02
