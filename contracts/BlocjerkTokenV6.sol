@@ -23,26 +23,26 @@ contract BlocjerkTokenV6 is BlocjerkTokenV5, UniswapV3 {
     console.log("v", version);
   }
 
-  function _sellTax(
-    uint256 tokenAmount
-  ) internal virtual override lockTheProcess {
-    uint256 tokensSold;
-    uint256 ethReceived;
+  // function _sellTax(
+  //   uint256 tokenAmount
+  // ) internal virtual override lockTheProcess {
+  //   uint256 tokensSold;
+  //   uint256 ethReceived;
 
-    if (
-      taxTo != address(0) &&
-      tokenAmount > 0 &&
-      address(uniswapV3Router) != address(0)
-    ) {
-      ethReceived = swapExactInputSingle(
-        address(this),
-        uniswapV3Router.WETH9(),
-        taxTo,
-        3000, // 0.3%
-        tokenAmount
-      );
-      tokensSold = tokenAmount;
-    }
-    emit SoldTax(tokensSold, ethReceived);
-  }
+  //   if (
+  //     taxTo != address(0) &&
+  //     tokenAmount > 0 &&
+  //     address(uniswapV3Router) != address(0)
+  //   ) {
+  //     ethReceived = swapExactInputSingle(
+  //       address(this),
+  //       uniswapV3Router.WETH9(),
+  //       taxTo,
+  //       3000, // 0.3%
+  //       tokenAmount
+  //     );
+  //     tokensSold = tokenAmount;
+  //   }
+  //   emit SoldTax(tokensSold, ethReceived);
+  // }
 }
