@@ -34,7 +34,7 @@ const main = async () => {
 
   console.log(`BlocjerkToken upgraded at ${bjToken.address}`);
 
-  console.log("Sleeping for 5 seconds for deployment...");
+  console.log("Sleeping for 10 seconds for deployment...");
   await sleep(10000);
 
   const blocjerkTokenImpl = await upgrades.erc1967.getImplementationAddress(

@@ -1,81 +1,59 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {IUniswapV2Factory} from "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
-import {IUniswapV2Router02} from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import {TransferHelper} from "@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {SafeMathUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import {IUniswapRouter02} from "../interfaces/IUniswapRouter02.sol";
 
 abstract contract UniswapV3 is OwnableUpgradeable {
-  using SafeMathUpgradeable for uint256;
-  // Using Uniswap lib, because Uniswap forks are trash ATM...
-  IUniswapV2Router02 internal uniswapV2Router;
-  // We will call createPair() when we decide. To avoid snippers and bots.
-  address internal uniswapV2Pair;
-  // This will be set when we call initDEXRouter().
-  address internal routerAddr;
+  // Mainnet: 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45
+  // Address to SwapRouter02
+  // https://github.com/Uniswap/swap-router-contracts/blob/main/contracts/SwapRouter02.sol
+  IUniswapRouter02 internal uniswapV3Router;
 
-  // To receive ETH from uniswapV2Router when swaping
-  receive() external payable {}
-
-  function setRouter(address router) external onlyOwner {
+  function setUniswapV3Router(address router) external {
     require(router != address(0));
-    uniswapV2Router = IUniswapV2Router02(router);
-    emit UniswapV2RouterSet(router);
+    uniswapV3Router = IUniswapRouter02(router);
+    emit UniswapV3RouterSet(router);
   }
 
-  /**
-   * @notice Swaps passed tokens for ETH using Uniswap router and returns
-   * actual amount received.
-   */
-  function swapTokensForETH(uint256 tokenAmount) internal returns (uint256) {
-    if (address(uniswapV2Router) != address(0)) {
-      uint256 initialBalance = address(this).balance;
-      // generate the uniswap pair path of token -> weth
-      address[] memory path = new address[](2);
-      path[0] = address(this);
-      path[1] = uniswapV2Router.WETH();
-
-      // Make the swap
-      uniswapV2Router.swapExactTokensForETHSupportingFeeOnTransferTokens(
-        tokenAmount,
-        0, // accept any amount of ETH
-        path,
+  function swapExactInputSingle(
+    address tokenIn,
+    address tokenOut,
+    address recipient,
+    uint24 poolFee,
+    uint amountIn
+  ) internal returns (uint amountOut) {
+    if (address(uniswapV3Router) != address(0)) {
+      TransferHelper.safeTransferFrom(
+        tokenIn,
+        msg.sender,
         address(this),
-        block.timestamp
+        amountIn
       );
 
-      uint256 ethReceived = address(this).balance.sub(initialBalance);
-      return ethReceived;
-    }
-    return 0;
-  }
+      // Approve the router to spend DAI.
+      TransferHelper.safeApprove(tokenIn, address(uniswapV3Router), amountIn);
 
-  function swapTokensByPath(
-    uint256 tokenAmountIn,
-    uint256 tokenAmountOutMin,
-    address[] memory path,
-    address to
-  ) internal {
-    if (address(uniswapV2Router) != address(0)) {
-      // Make the swap
-      uniswapV2Router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
-        tokenAmountIn,
-        tokenAmountOutMin,
-        path,
-        to,
-        block.timestamp
-      );
+      IUniswapRouter02.ExactInputSingleParams memory params = IUniswapRouter02
+        .ExactInputSingleParams({
+          tokenIn: tokenIn,
+          tokenOut: tokenOut,
+          fee: poolFee,
+          recipient: recipient,
+          amountIn: amountIn,
+          amountOutMinimum: 0,
+          sqrtPriceLimitX96: 0
+        });
+
+      amountOut = uniswapV3Router.exactInputSingle(params);
     }
   }
 
   /* --------------------------------- Events --------------------------------- */
-  event UniswapV2RouterSet(address indexed router);
   event UniswapV3RouterSet(address indexed router);
 
   /* -------------------------------- Modifiers ------------------------------- */
-  modifier pcsInitialized() {
-    require(routerAddr != address(0), "Router address has not been set!");
-    _;
-  }
 }

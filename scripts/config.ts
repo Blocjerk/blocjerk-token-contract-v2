@@ -9,7 +9,8 @@ export type Network =
   // | "polygon"
   // | "polygonMumbai"
   // | "bsc"
-  // | "bscTestnet";
+  // | "bscTestnet"
+  | "tenderly";
 
 interface Config {
   ownerAddress: string;
@@ -99,6 +100,15 @@ export const config: { [network in Network]: Config } = {
     symbol: "BJ",
   },
   arbitrumGoerli: {
+    ownerAddress: "0xD3b5134fef18b69e1ddB986338F2F80CD043a1AF",
+    treasuryAddress: "0xD3b5134fef18b69e1ddB986338F2F80CD043a1AF",
+    totalSupply: ethers.BigNumber.from(oneMillion)
+      .mul(10)
+      .mul(decimals),
+    name: "Blocjerk",
+    symbol: "BJ",
+  },
+  tenderly: {
     ownerAddress: "0xD3b5134fef18b69e1ddB986338F2F80CD043a1AF",
     treasuryAddress: "0xD3b5134fef18b69e1ddB986338F2F80CD043a1AF",
     totalSupply: ethers.BigNumber.from(oneMillion)
