@@ -43,16 +43,16 @@ const main = async () => {
     const bjTokenImpl = await upgrades.erc1967.getImplementationAddress(
       bjToken.address
     );
-    // await verifyContract(bjTokenImpl);
+    await verifyContract(bjTokenImpl);
 
-    // console.log(`Minting tokens...`);
-    // const tx = await bjToken.mint(
-    //   config[network.name].treasuryAddress,
-    //   config[network.name].totalSupply
-    // );
-    // console.log(`Waiting to finish...`);
-    // await tx.wait();
-    // console.log(`Finished minting`);
+    console.log(`Minting tokens...`);
+    const tx = await bjToken.mint(
+      config[network.name].treasuryAddress,
+      config[network.name].totalSupply
+    );
+    console.log(`Waiting to finish...`);
+    await tx.wait();
+    console.log(`Finished minting`);
 
     // console.log(
     //   `Transferring token ownership to ${config[network.name].ownerAddress}`

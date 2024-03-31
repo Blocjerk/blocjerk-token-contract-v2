@@ -44,7 +44,7 @@ export const calculateGasMargin = (
 };
 
 export const getManifest = (network: string) => {
-  if (network === "mainnet") {
+  if (network === "mainnet" || network === "tenderly") {
     return manifestMainnet;
   }
   if (network === "sepolia") {

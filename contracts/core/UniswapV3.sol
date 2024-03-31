@@ -13,7 +13,7 @@ abstract contract UniswapV3 is OwnableUpgradeable {
   // https://github.com/Uniswap/swap-router-contracts/blob/main/contracts/SwapRouter02.sol
   IUniswapRouter02 internal uniswapV3Router;
 
-  function setUniswapV3Router(address router) external {
+  function setUniswapV3Router(address router) external onlyOwner {
     require(router != address(0));
     uniswapV3Router = IUniswapRouter02(router);
     emit UniswapV3RouterSet(router);
