@@ -6,6 +6,7 @@ import {IUniswapV2Router02} from "@uniswap/v2-periphery/contracts/interfaces/IUn
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {SafeMathUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
+// @deprecated
 abstract contract Uniswap is OwnableUpgradeable {
   using SafeMathUpgradeable for uint256;
   // Using Uniswap lib, because Uniswap forks are trash ATM...
@@ -18,7 +19,7 @@ abstract contract Uniswap is OwnableUpgradeable {
   // To receive ETH from uniswapV2Router when swaping
   receive() external payable {}
 
-  function setRouter(address router, address pair) external onlyOwner {
+  function setUniswapV2Router(address router, address pair) external onlyOwner {
     require(router != address(0));
     uniswapV2Router = IUniswapV2Router02(router);
     uniswapV2Pair = pair;

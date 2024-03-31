@@ -1,11 +1,10 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers, network, upgrades } from "hardhat";
 import {
-  BlocjerkTokenV4__factory,
   BlocjerkTokenV5__factory,
+  BlocjerkTokenV6__factory,
 } from "../typechain";
-import { config } from "./config";
-import { getManifest, verifyContract } from "./helpers";
+import { getManifest } from "./helpers";
 
 const main = async () => {
   const signers = await ethers.getSigners();
@@ -25,13 +24,13 @@ const main = async () => {
 
   console.log("Proxy Address", proxyAddr);
 
-  const BlocjerkTokenV4Factory = new BlocjerkTokenV4__factory(deployer);
   const BlocjerkTokenV5Factory = new BlocjerkTokenV5__factory(deployer);
+  const BlocjerkTokenV6Factory = new BlocjerkTokenV6__factory(deployer);
 
   // Validate the upgrade without deploying/upgrading it
-  await upgrades.validateUpgrade(BlocjerkTokenV4Factory, BlocjerkTokenV5Factory);
+  await upgrades.validateUpgrade(BlocjerkTokenV5Factory, BlocjerkTokenV6Factory);
 
-  await upgrades.validateImplementation(BlocjerkTokenV5Factory);
+  await upgrades.validateImplementation(BlocjerkTokenV6Factory);
 };
 
 // We recommend this pattern to be able to use async/await everywhere

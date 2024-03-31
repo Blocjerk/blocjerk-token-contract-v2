@@ -47,6 +47,14 @@ const config: HardhatUserConfig = {
     timeout: 50000,
   },
   networks: {
+    tenderlySepolia: {
+      url: `https://rpc.tenderly.co/fork/caa36591-0c9f-414f-b818-585e638ebf63`, // sepolia
+      accounts: [process.env.TESTNET_PRIVATE_KEY],
+    },
+    tenderlyMainnet: {
+      url: `https://rpc.tenderly.co/fork/40a796db-12b7-440f-bb69-0f07a6708a46`, // mainnet
+      accounts: [process.env.MAINNET_PRIVATE_KEY],
+    },
     mainnet: {
       url: `https://eth-mainnet.public.blastapi.io`,
       accounts: [process.env.MAINNET_PRIVATE_KEY],

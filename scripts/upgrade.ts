@@ -1,11 +1,11 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ethers, network, upgrades } from "hardhat";
 import {
-  BlocjerkTokenV5,
-  BlocjerkTokenV4__factory,
+  BlocjerkTokenV6,
   BlocjerkTokenV5__factory,
+  BlocjerkTokenV6__factory,
 } from "../typechain";
-import { getManifest, verifyContract } from "./helpers";
+import { getManifest, sleep, verifyContract } from "./helpers";
 
 const main = async () => {
   const signers = await ethers.getSigners();
@@ -21,18 +21,30 @@ const main = async () => {
     throw new Error(`Not found manifest for ${network.name}`);
   }
 
+  if (network.name === "tenderlySepolia" || network.name === "tenderlyMainnet") {
+    await network.provider.send("tenderly_setBalance", [
+      deployer.address,
+      ethers.utils.parseEther("1000").toHexString(),
+    ]);
+    const balance = await deployer.getBalance();
+    console.log("Balance", balance.toString());
+  }
+
   const proxyAddr = manifest.proxies[0].address;
 
   console.log("Proxy Address", proxyAddr);
 
-  // const BlocjerkTokenV4Factory = new BlocjerkTokenV4__factory(deployer);
-  // await upgrades.forceImport(proxyAddr, BlocjerkTokenV4Factory);
-  const BlocjerkTokenV5Factory = new BlocjerkTokenV5__factory(deployer);
+  // const BlocjerkTokenV5Factory = new BlocjerkTokenV5__factory(deployer);
+  // await upgrades.forceImport(proxyAddr, BlocjerkTokenV5Factory);
+  const BlocjerkTokenV6Factory = new BlocjerkTokenV6__factory(deployer);
   const bjToken = (await upgrades.upgradeProxy(
     proxyAddr,
-    BlocjerkTokenV5Factory)) as BlocjerkTokenV5;
+    BlocjerkTokenV6Factory)) as BlocjerkTokenV6;
 
   console.log(`BlocjerkToken upgraded at ${bjToken.address}`);
+
+  console.log("Sleeping for 10 seconds for deployment...");
+  await sleep(10000);
 
   const blocjerkTokenImpl = await upgrades.erc1967.getImplementationAddress(
     bjToken.address

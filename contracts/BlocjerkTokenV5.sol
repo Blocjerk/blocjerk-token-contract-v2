@@ -21,7 +21,8 @@ contract BlocjerkTokenV5 is BlocjerkTokenV4WithVersion, Uniswap {
   // immediately sell tax for ETH and send to taxTo address.
   uint256 public minTaxForSell;
 
-  address public USDT;
+  // @deprecated, unused variable
+  address internal USDT;
 
   bool internal inTriggerProcess;
   modifier lockTheProcess() {
@@ -35,15 +36,16 @@ contract BlocjerkTokenV5 is BlocjerkTokenV4WithVersion, Uniswap {
    * variables and execute other upgrade logic.
    * Ref: https://github.com/OpenZeppelin/openzeppelin-upgrades/issues/62
    */
-  function upgradeToV5() external {
-    require(version < 5, "DeHubToken: Already upgraded to version 5");
-    version = 5;
-    console.log("v", version);
-  }
+  // function upgradeToV5() external {
+  //   require(version < 5, "DeHubToken: Already upgraded to version 5");
+  //   version = 5;
+  //   console.log("v", version);
+  // }
 
-  function setUSDT(address USDT_) external onlyOwner {
-    USDT = USDT_;
-  }
+  // @deprecated
+  // function setUSDT(address USDT_) external onlyOwner {
+  //   USDT = USDT_;
+  // }
 
   function setMinTaxForSell(uint256 minTaxForSell_) external onlyOwner {
     require(minTaxForSell != minTaxForSell_);
@@ -94,7 +96,11 @@ contract BlocjerkTokenV5 is BlocjerkTokenV4WithVersion, Uniswap {
     uint256 tokensSold;
     uint256 ethReceived;
 
-    if (taxTo != address(0) && tokenAmount > 0) {
+    if (
+      taxTo != address(0) &&
+      tokenAmount > 0 &&
+      address(uniswapV2Router) != address(0)
+    ) {
       // Must approve before swapping
       _approve(address(this), address(uniswapV2Router), tokenAmount);
 
