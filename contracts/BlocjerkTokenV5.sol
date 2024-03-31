@@ -22,7 +22,7 @@ contract BlocjerkTokenV5 is BlocjerkTokenV4WithVersion, Uniswap {
   uint256 public minTaxForSell;
 
   // @deprecated, unused variable
-  address public USDT;
+  address internal USDT;
 
   bool internal inTriggerProcess;
   modifier lockTheProcess() {
@@ -36,15 +36,16 @@ contract BlocjerkTokenV5 is BlocjerkTokenV4WithVersion, Uniswap {
    * variables and execute other upgrade logic.
    * Ref: https://github.com/OpenZeppelin/openzeppelin-upgrades/issues/62
    */
-  function upgradeToV5() external {
-    require(version < 5, "DeHubToken: Already upgraded to version 5");
-    version = 5;
-    console.log("v", version);
-  }
+  // function upgradeToV5() external {
+  //   require(version < 5, "DeHubToken: Already upgraded to version 5");
+  //   version = 5;
+  //   console.log("v", version);
+  // }
 
-  function setUSDT(address USDT_) external onlyOwner {
-    USDT = USDT_;
-  }
+  // @deprecated
+  // function setUSDT(address USDT_) external onlyOwner {
+  //   USDT = USDT_;
+  // }
 
   function setMinTaxForSell(uint256 minTaxForSell_) external onlyOwner {
     require(minTaxForSell != minTaxForSell_);

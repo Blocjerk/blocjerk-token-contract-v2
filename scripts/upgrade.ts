@@ -21,6 +21,15 @@ const main = async () => {
     throw new Error(`Not found manifest for ${network.name}`);
   }
 
+  if (network.name === "tenderlySepolia" || network.name === "tenderlyMainnet") {
+    await network.provider.send("tenderly_setBalance", [
+      deployer.address,
+      ethers.utils.parseEther("1000").toHexString(),
+    ]);
+    const balance = await deployer.getBalance();
+    console.log("Balance", balance.toString());
+  }
+
   const proxyAddr = manifest.proxies[0].address;
 
   console.log("Proxy Address", proxyAddr);
