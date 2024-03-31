@@ -1,5 +1,5 @@
 import * as hre from "hardhat";
-import { IERC20__factory, IWETH__factory, TestParent__factory, TestUniswapV3, TestUniswapV3__factory } from "../../typechain";
+import { IERC20__factory, IUniswapRouter02__factory, IWETH__factory, TestParent__factory, TestUniswapV3, TestUniswapV3__factory } from "../../typechain";
 
 const main = async () => {
   const deployers = await hre.ethers.getSigners();
@@ -39,12 +39,17 @@ const main = async () => {
   console.log("TestUniswapV3", testUniswapV3.address);
   console.log("owner", await testUniswapV3.owner());
 
-  await testUniswapV3.setUniswapV3Router("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45");
-  console.log("set router: 0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45");
+  const routerAddress = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
+  await testUniswapV3.setUniswapV3Router(routerAddress);
+  console.log(`set router: ${routerAddress}`);
+
+  const router = IUniswapRouter02__factory.connect(routerAddress, deployer);
+  const wETHAddress = await router.WETH9();
+  console.log(`wETH: ${wETHAddress}`);
 
   const amount = hre.ethers.utils.parseEther("100");
   console.log("amount", amount.toString());
-  const WETH = IWETH__factory.connect("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", deployer);
+  const WETH = IWETH__factory.connect(wETHAddress, deployer);
   await WETH.deposit({ value: amount });
   console.log("WETH balance", (await WETH.balanceOf(deployer.address)).toString());
   

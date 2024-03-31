@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {IPeripheryImmutableState} from "@uniswap/v3-periphery/contracts/interfaces/IPeripheryImmutableState.sol";
+
 /// @title Router token swapping functionality, SwapRouter02
 ///        https://github.com/Uniswap/swap-router-contracts/blob/main/contracts/SwapRouter02.sol
 /// @notice Functions for swapping tokens via Uniswap V3
-interface IUniswapRouter02 {
+interface IUniswapRouter02 is IPeripheryImmutableState {
   struct ExactInputSingleParams {
     address tokenIn;
     address tokenOut;
