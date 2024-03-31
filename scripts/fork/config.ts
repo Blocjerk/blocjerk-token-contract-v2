@@ -6,7 +6,7 @@ const main = async () => {
   const deployers = await hre.ethers.getSigners();
   let deployer = deployers[0];
 
-  if (hre.network.name !== "tenderly" && hre.network.name !== "hardhat") {
+  if (hre.network.name !== "tenderlySepolia" && hre.network.name !== "tenderlyMainnet" && hre.network.name !== "hardhat") {
     console.log("network", hre.network.name);
     return;
   }
@@ -22,7 +22,7 @@ const main = async () => {
       deployer.address,
       hre.ethers.utils.parseEther("1000").toHexString(),
     ]);
-  } else if (hre.network.name === "tenderly") {
+  } else if (hre.network.name === "tenderlySepolia" || hre.network.name === "tenderlyMainnet") {
     await hre.network.provider.send("tenderly_setBalance", [
       deployer.address,
       hre.ethers.utils.parseEther("1000").toHexString(),

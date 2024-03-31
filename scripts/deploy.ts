@@ -26,7 +26,8 @@ const main = async () => {
     // network.name === "polygonMumbai" ||
     // network.name === "bsc" ||
     // network.name === "bscTestnet" ||
-    network.name === "tenderly" ||
+    network.name === "tenderlySepolia" ||
+    network.name === "tenderlyMainnet" ||
     false
   ) {
     console.log(config[network.name]);

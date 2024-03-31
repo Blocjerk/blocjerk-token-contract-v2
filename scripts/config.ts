@@ -10,7 +10,8 @@ export type Network =
   // | "polygonMumbai"
   // | "bsc"
   // | "bscTestnet"
-  | "tenderly";
+  | "tenderlySepolia"
+  | "tenderlyMainnet";
 
 interface Config {
   ownerAddress: string;
